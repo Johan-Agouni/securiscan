@@ -1,0 +1,26 @@
+{
+  "name": "securiscan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SaaS de monitoring de securite web - Security scanning platform",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "dev:server": "npm run dev -w server",
+    "dev:client": "npm run dev -w client",
+    "build": "npm run build -ws",
+    "test": "npm test -ws",
+    "lint": "npm run lint -ws",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "author": "Johan Agouni",
+  "license": "MIT"
+}
