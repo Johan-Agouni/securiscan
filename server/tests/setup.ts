@@ -1,0 +1,12 @@
+process.env.NODE_ENV = 'test';
+process.env.PORT = '4001';
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/securiscan_test';
+process.env.REDIS_URL = 'redis://localhost:6379';
+process.env.JWT_SECRET = 'test-jwt-secret-at-least-16-chars';
+process.env.JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-16';
+process.env.JWT_ACCESS_EXPIRY = '15m';
+process.env.JWT_REFRESH_EXPIRY = '7d';
+process.env.FRONTEND_URL = 'http://localhost:3000';
+process.env.FROM_EMAIL = 'test@securiscan.dev';
+process.env.SMTP_HOST = 'smtp.ethereal.email';
+process.env.SMTP_PORT = '587';
