@@ -48,8 +48,8 @@ export default function LoginPage() {
   return (
     <div>
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Connexion</h1>
-        <p className="mt-2 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Connexion</h1>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Connectez-vous pour acceder a votre tableau de bord
         </p>
       </div>
@@ -92,7 +92,7 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Pas encore de compte ?{' '}
         <Link
           href="/register"

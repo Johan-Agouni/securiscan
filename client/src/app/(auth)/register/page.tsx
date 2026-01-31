@@ -72,8 +72,8 @@ export default function RegisterPage() {
   return (
     <div>
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Creer un compte</h1>
-        <p className="mt-2 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Creer un compte</h1>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Commencez a securiser vos sites web gratuitement
         </p>
       </div>
@@ -134,7 +134,7 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Deja un compte ?{' '}
         <Link
           href="/login"

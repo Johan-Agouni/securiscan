@@ -55,17 +55,17 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         className={cn(
-          'relative z-10 w-full max-w-lg bg-white rounded-xl shadow-xl p-6 mx-4 animate-[scaleIn_150ms_ease-out]',
+          'relative z-10 w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 mx-4 animate-[scaleIn_150ms_ease-out]',
           className
         )}
       >
         {/* Header */}
         {title && (
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors"
+              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               aria-label="Fermer"
             >
               <X className="h-5 w-5" />

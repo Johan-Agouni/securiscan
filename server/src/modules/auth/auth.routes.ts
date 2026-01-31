@@ -8,6 +8,8 @@ import {
   refreshSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  updateProfileSchema,
+  changePasswordSchema,
 } from './auth.schema';
 import {
   register,
@@ -18,6 +20,8 @@ import {
   resetPassword,
   verifyEmail,
   getProfile,
+  updateProfile,
+  changePassword,
 } from './auth.controller';
 
 const router = Router();
@@ -35,5 +39,7 @@ router.post(
 router.post('/reset-password', validate(resetPasswordSchema), resetPassword);
 router.get('/verify-email/:token', verifyEmail);
 router.get('/me', authenticate, getProfile);
+router.put('/me', authenticate, validate(updateProfileSchema), updateProfile);
+router.put('/me/password', authenticate, validate(changePasswordSchema), changePassword);
 
 export const authRoutes = router;

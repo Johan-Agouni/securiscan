@@ -214,6 +214,35 @@ export class AuthService {
     });
   }
 
+  async updateProfile(
+    userId: string,
+    data: { firstName?: string; lastName?: string; notificationsEnabled?: boolean }
+  ) {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data,
+    });
+    return excludePassword(user);
+  }
+
+  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw ApiError.notFound('User not found');
+    }
+
+    const isMatch = await comparePassword(currentPassword, user.passwordHash);
+    if (!isMatch) {
+      throw ApiError.unauthorized('Mot de passe actuel incorrect');
+    }
+
+    const hashed = await hashPassword(newPassword);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: hashed },
+    });
+  }
+
   async getProfile(userId: string) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
