@@ -15,7 +15,20 @@ import { apiResponse } from './utils/apiResponse';
 export function createApp() {
   const app = express();
 
-  // HTTPS redirect in production
+  // Trust proxy must be set before any middleware that reads headers
+  if (config.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+  }
+
+  // CORS (must be before HTTPS redirect and helmet for preflight requests)
+  app.use(
+    cors({
+      origin: config.FRONTEND_URL,
+      credentials: true,
+    })
+  );
+
+  // HTTPS redirect in production (after CORS so preflight OPTIONS work)
   if (config.NODE_ENV === 'production') {
     app.use((req, res, next) => {
       if (req.headers['x-forwarded-proto'] !== 'https') {
@@ -23,16 +36,7 @@ export function createApp() {
       }
       next();
     });
-    app.set('trust proxy', 1);
   }
-
-  // CORS (must be before helmet for preflight requests)
-  app.use(
-    cors({
-      origin: config.FRONTEND_URL,
-      credentials: true,
-    })
-  );
 
   // Security
   app.use(
