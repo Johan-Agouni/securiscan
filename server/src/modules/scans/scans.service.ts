@@ -82,6 +82,9 @@ export const scansService = {
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
+        include: {
+          _count: { select: { scanResults: true } },
+        },
       }),
       prisma.scan.count({
         where: { siteId },
