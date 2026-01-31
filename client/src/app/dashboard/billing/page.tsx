@@ -37,7 +37,8 @@ export default function BillingPage() {
     const fetchPayments = async () => {
       try {
         const { data } = await api.get('/api/payments/history');
-        setPayments(data.data || data || []);
+        const result = data.data || data || {};
+        setPayments(Array.isArray(result) ? result : result.payments || []);
       } catch {
         // Payment history may not be available for free plans
       } finally {
