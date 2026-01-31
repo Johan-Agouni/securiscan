@@ -47,11 +47,12 @@ export class AuthService {
     });
 
     const verifyUrl = `${config.FRONTEND_URL}/verify-email?token=${emailVerifyToken}`;
-    await sendEmail(
+    // Fire-and-forget: don't block registration if email fails or times out
+    sendEmail(
       email,
       'Verifiez votre email - SecuriScan',
       `<p>Bienvenue sur SecuriScan ! Cliquez <a href="${verifyUrl}">ici</a> pour verifier votre email.</p>`
-    );
+    ).catch(() => {});
 
     return excludePassword(user);
   }
