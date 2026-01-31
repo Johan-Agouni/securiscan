@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -11,6 +11,12 @@ import {
   ExternalLink,
   Clock,
   ArrowRight,
+  Shield,
+  Lock,
+  Globe,
+  Zap,
+  CheckCircle2,
+  Loader2,
 } from 'lucide-react';
 import {
   LineChart,
@@ -32,6 +38,108 @@ import { formatDate, formatDateTime, truncateUrl } from '@/lib/utils';
 import { SCAN_STATUS_LABELS } from '@/lib/constants';
 import type { Site, Scan } from '@/types';
 
+const POLL_INTERVAL_MS = 5000;
+
+const SCAN_STEPS = [
+  { key: 'ssl', label: 'Certificat SSL', icon: Lock },
+  { key: 'headers', label: 'En-tetes HTTP', icon: Shield },
+  { key: 'owasp', label: 'Vulnerabilites OWASP', icon: Globe },
+  { key: 'performance', label: 'Performance', icon: Zap },
+];
+
+function ScanProgressCard({ scan }: { scan: Scan }) {
+  const [elapsed, setElapsed] = useState(0);
+  const startTime = scan.startedAt ? new Date(scan.startedAt).getTime() : Date.now();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [startTime]);
+
+  // Simulate progress based on elapsed time (each step ~10-15s)
+  const estimatedStepDuration = 12;
+  const currentStepIndex = Math.min(
+    Math.floor(elapsed / estimatedStepDuration),
+    SCAN_STEPS.length - 1
+  );
+  const stepProgress = Math.min(
+    ((elapsed % estimatedStepDuration) / estimatedStepDuration) * 100,
+    100
+  );
+  const overallProgress = Math.min(
+    ((currentStepIndex * 100 + stepProgress) / SCAN_STEPS.length),
+    95
+  );
+
+  return (
+    <Card className="border-brand-200 bg-gradient-to-r from-brand-50 to-white">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Loader2 className="h-6 w-6 text-brand-600 animate-spin" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Scan en cours...</h3>
+              <p className="text-sm text-gray-500">
+                Analyse de securite en cours depuis {elapsed}s
+              </p>
+            </div>
+          </div>
+          <Badge variant="info">En cours</Badge>
+        </div>
+
+        {/* Overall progress bar */}
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>Progression</span>
+            <span>{Math.round(overallProgress)}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+            <div
+              className="bg-brand-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: `${overallProgress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Steps */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {SCAN_STEPS.map((step, index) => {
+            const Icon = step.icon;
+            const isComplete = index < currentStepIndex;
+            const isActive = index === currentStepIndex;
+
+            return (
+              <div
+                key={step.key}
+                className={`flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all ${
+                  isComplete
+                    ? 'bg-green-50 text-green-700'
+                    : isActive
+                      ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300'
+                      : 'bg-gray-50 text-gray-400'
+                }`}
+              >
+                {isComplete ? (
+                  <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />
+                ) : isActive ? (
+                  <Loader2 className="h-4 w-4 animate-spin flex-shrink-0" />
+                ) : (
+                  <Icon className="h-4 w-4 flex-shrink-0" />
+                )}
+                <span className="truncate font-medium">{step.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
 export default function SiteDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -44,6 +152,7 @@ export default function SiteDetailPage() {
   const [scanning, setScanning] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -60,6 +169,27 @@ export default function SiteDetailPage() {
       setLoading(false);
     }
   }, [siteId, addToast]);
+
+  // Check if any scan is in progress
+  const hasActiveScan = scans.some(
+    (s) => s.status === 'PENDING' || s.status === 'RUNNING'
+  );
+
+  // Polling: auto-refresh while a scan is running
+  useEffect(() => {
+    if (hasActiveScan) {
+      pollRef.current = setInterval(() => {
+        fetchData();
+      }, POLL_INTERVAL_MS);
+    }
+
+    return () => {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    };
+  }, [hasActiveScan, fetchData]);
 
   useEffect(() => {
     fetchData();
@@ -276,6 +406,13 @@ export default function SiteDetailPage() {
           </dl>
         </Card>
       </div>
+
+      {/* Active Scan Progress */}
+      {scans
+        .filter((s) => s.status === 'PENDING' || s.status === 'RUNNING')
+        .map((scan) => (
+          <ScanProgressCard key={scan.id} scan={scan} />
+        ))}
 
       {/* Score History Chart */}
       {chartData.length > 1 && (
