@@ -252,15 +252,18 @@ export default function SiteDetailPage() {
     );
   }
 
-  const latestScore = site.latestScan?.overallScore ?? null;
-
-  // Chart data: score history
-  const chartData = scans
+  // Compute latest score from scans (most recent completed scan)
+  const completedScans = scans
     .filter((s) => s.status === 'COMPLETED' && s.overallScore != null)
     .sort(
       (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    )
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  const latestScore = completedScans[0]?.overallScore ?? null;
+
+  // Chart data: score history (chronological order)
+  const chartData = [...completedScans]
+    .reverse()
     .map((s) => ({
       date: formatDate(s.createdAt),
       score: s.overallScore,
