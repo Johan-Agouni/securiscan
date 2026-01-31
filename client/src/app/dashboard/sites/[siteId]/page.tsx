@@ -149,6 +149,10 @@ export default function SiteDetailPage() {
   const [scanning, setScanning] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editActive, setEditActive] = useState(true);
+  const [saving, setSaving] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -202,6 +206,31 @@ export default function SiteDetailPage() {
       addToast('Erreur lors du lancement du scan.', 'error');
     } finally {
       setScanning(false);
+    }
+  };
+
+  const openEditModal = () => {
+    if (site) {
+      setEditName(site.name);
+      setEditActive(site.isActive);
+      setShowEditModal(true);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    setSaving(true);
+    try {
+      await api.put(`/api/sites/${siteId}`, {
+        name: editName,
+        isActive: editActive,
+      });
+      addToast('Site modifie avec succes.', 'success');
+      setShowEditModal(false);
+      await fetchData();
+    } catch {
+      addToast('Erreur lors de la modification du site.', 'error');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -307,7 +336,7 @@ export default function SiteDetailPage() {
             <Button
               variant="secondary"
               className="gap-2"
-              onClick={() => addToast('Fonctionnalite bientot disponible.', 'info')}
+              onClick={openEditModal}
             >
               <Settings className="h-4 w-4" />
               Modifier
@@ -356,6 +385,56 @@ export default function SiteDetailPage() {
             </div>
           </div>
         </Card>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Modifier le site
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Nom du site
+                </label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Site actif
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setEditActive(!editActive)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    editActive ? 'bg-brand-600' : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      editActive ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                Annuler
+              </Button>
+              <Button onClick={handleSaveEdit} isLoading={saving}>
+                Enregistrer
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Score + Info */}
