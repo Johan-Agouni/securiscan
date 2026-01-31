@@ -49,7 +49,7 @@ export default function SiteDetailPage() {
     try {
       const [siteRes, scansRes] = await Promise.all([
         api.get(`/api/sites/${siteId}`),
-        api.get(`/api/sites/${siteId}/scans`),
+        api.get(`/api/scans/site/${siteId}`),
       ]);
       setSite(siteRes.data.data || siteRes.data);
       const scansData = scansRes.data.data?.scans || scansRes.data.data || scansRes.data;
@@ -68,7 +68,7 @@ export default function SiteDetailPage() {
   const handleStartScan = async () => {
     setScanning(true);
     try {
-      await api.post(`/api/sites/${siteId}/scans`);
+      await api.post(`/api/scans/trigger/${siteId}`);
       addToast('Scan lance avec succes !', 'success');
       await fetchData();
     } catch {
