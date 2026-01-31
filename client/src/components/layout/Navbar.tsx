@@ -6,8 +6,8 @@ import { Shield, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 const navLinks = [
-  { href: '/features', label: 'Fonctionnalites' },
-  { href: '/pricing', label: 'Tarifs' },
+  { href: '/#features', label: 'Fonctionnalites' },
+  { href: '/#pricing', label: 'Tarifs' },
 ];
 
 export function Navbar() {
