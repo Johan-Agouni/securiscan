@@ -17,6 +17,7 @@ import {
   Zap,
   CheckCircle2,
   Loader2,
+  Calendar,
 } from 'lucide-react';
 import {
   LineChart,
@@ -36,9 +37,16 @@ import { Spinner } from '@/components/ui/Spinner';
 import { ScoreGauge } from '@/components/dashboard/ScoreGauge';
 import { formatDate, formatDateTime, truncateUrl } from '@/lib/utils';
 import { SCAN_STATUS_LABELS } from '@/lib/constants';
-import type { Site, Scan } from '@/types';
+import type { Site, Scan, ScanSchedule } from '@/types';
 
 const POLL_INTERVAL_MS = 5000;
+
+const SCHEDULE_OPTIONS: { value: ScanSchedule; label: string }[] = [
+  { value: 'NONE', label: 'Aucun' },
+  { value: 'DAILY', label: 'Quotidien' },
+  { value: 'WEEKLY', label: 'Hebdomadaire' },
+  { value: 'MONTHLY', label: 'Mensuel' },
+];
 
 const SCAN_STEPS = [
   { key: 'ssl', label: 'Certificat SSL', icon: Lock },
@@ -231,6 +239,16 @@ export default function SiteDetailPage() {
       addToast('Erreur lors de la modification du site.', 'error');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleScheduleChange = async (schedule: ScanSchedule) => {
+    try {
+      await api.put(`/api/sites/${siteId}/schedule`, { scanSchedule: schedule });
+      addToast('Planification mise a jour.', 'success');
+      await fetchData();
+    } catch {
+      addToast('Erreur lors de la mise a jour de la planification.', 'error');
     }
   };
 
@@ -480,6 +498,27 @@ export default function SiteDetailPage() {
               <dt className="text-sm text-gray-500 dark:text-gray-400">Nombre de scans</dt>
               <dd className="mt-1 text-sm font-medium text-gray-900 dark:text-white">
                 {scans.length}
+              </dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-2">
+                <Calendar className="h-4 w-4" />
+                Scan programme
+              </dt>
+              <dd className="flex flex-wrap gap-2">
+                {SCHEDULE_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => handleScheduleChange(opt.value)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      (site.scanSchedule || 'NONE') === opt.value
+                        ? 'bg-brand-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </dd>
             </div>
           </dl>

@@ -10,11 +10,15 @@ export interface User {
   createdAt: string;
 }
 
+export type ScanSchedule = 'NONE' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+
 export interface Site {
   id: string;
   url: string;
   name: string;
   isActive: boolean;
+  scanSchedule?: ScanSchedule;
+  nextScanAt?: string | null;
   createdAt: string;
   updatedAt: string;
   latestScan?: Scan | null;

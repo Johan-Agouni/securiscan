@@ -6,6 +6,8 @@ import { runAllChecks } from './scanner.service';
 import { calculateScore } from './scoring';
 import { sendEmail } from '../notifications/email.service';
 import { scanAlertTemplate } from '../notifications/templates/scan-alert';
+import { scanCompleteTemplate } from '../notifications/templates/scan-complete';
+import { config } from '../../config';
 import { Prisma } from '@prisma/client';
 import type { ScanJobData, CheckResult } from './scanner.types';
 
@@ -27,7 +29,28 @@ function toPrismaSeverity(
  * testable.
  */
 async function processScanJob(job: Job<ScanJobData>): Promise<void> {
-  const { scanId, siteUrl } = job.data;
+  let { scanId, siteUrl } = job.data;
+  const { siteId, scheduled } = job.data;
+
+  // For scheduled scans, create a new scan record first
+  if (scheduled && siteId && !scanId) {
+    const site = await prisma.site.findUnique({
+      where: { id: siteId },
+      select: { url: true, isActive: true },
+    });
+
+    if (!site || !site.isActive) {
+      logger.info(`Skipping scheduled scan for inactive/missing site ${siteId}`);
+      return;
+    }
+
+    siteUrl = site.url;
+    const scan = await prisma.scan.create({
+      data: { siteId, status: 'PENDING' },
+    });
+    scanId = scan.id;
+    logger.info(`Created scan ${scanId} for scheduled job on site ${siteId}`);
+  }
 
   logger.info(`Starting scan ${scanId} for ${siteUrl}`);
 
@@ -77,36 +100,84 @@ async function processScanJob(job: Job<ScanJobData>): Promise<void> {
     `Scan ${scanId} completed for ${siteUrl} with score ${overallScore}`,
   );
 
-  // ── 6. Send alert if score is low or critical findings exist ─────────
+  // ── 6. Send scan completion notification ────────────────────────────
+  await sendCompletionNotification(scanId, siteUrl, overallScore);
+
+  // ── 7. Send alert if score is low, critical findings, or score drop ─
   const criticalCount = results.filter(
     (r) => r.severity === 'CRITICAL',
   ).length;
 
-  if (overallScore < 50 || criticalCount > 0) {
-    await sendAlertIfEnabled(scanId, siteUrl, overallScore, criticalCount);
+  const previousScan = await prisma.scan.findFirst({
+    where: {
+      siteId: (await prisma.scan.findUnique({ where: { id: scanId }, select: { siteId: true } }))!.siteId,
+      status: 'COMPLETED',
+      id: { not: scanId },
+    },
+    orderBy: { completedAt: 'desc' },
+    select: { overallScore: true },
+  });
+
+  const scoreDrop = previousScan?.overallScore != null
+    ? previousScan.overallScore - overallScore
+    : 0;
+
+  if (overallScore < 50 || criticalCount > 0 || scoreDrop >= 10) {
+    await sendAlertIfEnabled(scanId, siteUrl, overallScore, criticalCount, scoreDrop);
+  }
+}
+
+/**
+ * Send a "scan complete" notification email when notifications are enabled.
+ */
+async function sendCompletionNotification(
+  scanId: string,
+  siteUrl: string,
+  score: number,
+): Promise<void> {
+  try {
+    const scan = await prisma.scan.findUnique({
+      where: { id: scanId },
+      include: { site: { include: { user: true } } },
+    });
+
+    if (!scan?.site?.user) return;
+
+    const { user, name: siteName } = scan.site;
+
+    if (!user.notificationsEnabled) return;
+
+    const { subject, html } = scanCompleteTemplate(
+      siteName,
+      score,
+      config.FRONTEND_URL,
+      scanId,
+    );
+
+    await sendEmail(user.email, subject, html);
+    logger.info(`Completion email sent to ${user.email} for scan ${scanId}`);
+  } catch (error) {
+    logger.error(
+      `Failed to send completion email for scan ${scanId}: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
 /**
  * Look up the site owner and send a scan alert email when notifications
- * are enabled.
+ * are enabled. Triggers on critical findings, low score, or significant score drop.
  */
 async function sendAlertIfEnabled(
   scanId: string,
   siteUrl: string,
   score: number,
   criticalCount: number,
+  scoreDrop: number = 0,
 ): Promise<void> {
   try {
     const scan = await prisma.scan.findUnique({
       where: { id: scanId },
-      include: {
-        site: {
-          include: {
-            user: true,
-          },
-        },
-      },
+      include: { site: { include: { user: true } } },
     });
 
     if (!scan?.site?.user) {
@@ -134,9 +205,8 @@ async function sendAlertIfEnabled(
 
     await sendEmail(user.email, subject, html);
 
-    logger.info(`Alert email sent to ${user.email} for scan ${scanId}`);
+    logger.info(`Alert email sent to ${user.email} for scan ${scanId} (scoreDrop=${scoreDrop})`);
   } catch (error) {
-    // Alert delivery failure should not mark the scan as failed.
     logger.error(
       `Failed to send alert for scan ${scanId}: ${error instanceof Error ? error.message : String(error)}`,
     );

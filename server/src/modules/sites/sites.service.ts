@@ -1,5 +1,7 @@
 import { prisma } from '../../config/database';
 import { ApiError } from '../../utils/ApiError';
+import { ScanSchedule } from '@prisma/client';
+import { scheduleRecurringScan } from '../scanner/scheduler.service';
 
 const PLAN_LIMITS: Record<string, { maxSites: number }> = {
   FREE: { maxSites: 2 },
@@ -129,6 +131,29 @@ export const sitesService = {
       where: { id: siteId },
       data,
     });
+
+    return updated;
+  },
+
+  async updateSchedule(
+    siteId: string,
+    userId: string,
+    scanSchedule: ScanSchedule,
+  ) {
+    const site = await prisma.site.findFirst({
+      where: { id: siteId, userId },
+    });
+
+    if (!site) {
+      throw ApiError.notFound('Site not found');
+    }
+
+    const updated = await prisma.site.update({
+      where: { id: siteId },
+      data: { scanSchedule },
+    });
+
+    await scheduleRecurringScan(siteId, scanSchedule);
 
     return updated;
   },

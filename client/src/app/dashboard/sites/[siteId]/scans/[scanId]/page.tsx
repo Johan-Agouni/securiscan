@@ -11,10 +11,12 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
+  Download,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
 import { ScoreGauge } from '@/components/dashboard/ScoreGauge';
@@ -232,12 +234,39 @@ export default function ScanDetailPage() {
           <ArrowLeft className="h-4 w-4" />
           Retour au site
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Detail du scan
-        </h1>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          {formatDateTime(scan.createdAt)}
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Detail du scan
+            </h1>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              {formatDateTime(scan.createdAt)}
+            </p>
+          </div>
+          {scan.status === 'COMPLETED' && (
+            <Button
+              variant="secondary"
+              className="gap-2"
+              onClick={() => {
+                const token = localStorage.getItem('accessToken');
+                const url = `${process.env.NEXT_PUBLIC_API_URL}/api/scans/${scanId}/report/pdf`;
+                fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+                  .then((res) => res.blob())
+                  .then((blob) => {
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `securiscan-report.pdf`;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                  })
+                  .catch(() => addToast('Erreur lors du telechargement du PDF.', 'error'));
+              }}
+            >
+              <Download className="h-4 w-4" />
+              Telecharger PDF
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Overview */}

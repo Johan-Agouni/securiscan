@@ -41,6 +41,16 @@ export const sitesController = {
     apiResponse({ res, data: site, message: 'Site updated successfully' });
   }),
 
+  updateSchedule: asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.user!.userId;
+    const siteId = req.params.siteId as string;
+    const { scanSchedule } = req.body;
+
+    const site = await sitesService.updateSchedule(siteId, userId, scanSchedule);
+
+    apiResponse({ res, data: site, message: 'Schedule updated successfully' });
+  }),
+
   remove: asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user!.userId;
     const siteId = req.params.siteId as string;

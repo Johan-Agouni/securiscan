@@ -29,6 +29,13 @@ enum ScanStatus {
   FAILED
 }
 
+enum ScanSchedule {
+  NONE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
 enum SeverityLevel {
   PASS
   INFO
@@ -83,9 +90,11 @@ model Site {
   url       String
   name      String
   userId    String   @map("user_id")
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive     Boolean      @default(true) @map("is_active")
+  scanSchedule ScanSchedule @default(NONE) @map("scan_schedule")
+  nextScanAt   DateTime?    @map("next_scan_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
 
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   scans Scan[]

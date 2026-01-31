@@ -41,4 +41,11 @@ router.get(
   scansController.getScanResults
 );
 
+router.get(
+  '/:scanId/report/pdf',
+  authenticate,
+  validate(scanDetailSchema),
+  scansController.downloadPDF
+);
+
 export const scansRoutes = router;

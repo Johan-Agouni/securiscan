@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.2.0",
+    "@types/pdfkit": "^0.17.4",
     "bcryptjs": "^2.4.3",
     "bullmq": "^5.30.0",
     "cors": "^2.8.5",
@@ -27,6 +28,7 @@
     "hpp": "^0.2.3",
     "ioredis": "^5.4.2",
     "jsonwebtoken": "^9.0.2",
+    "pdfkit": "^0.17.2",
     "resend": "^6.9.1",
     "stripe": "^17.5.0",
     "winston": "^3.17.0",

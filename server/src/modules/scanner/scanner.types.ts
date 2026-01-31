@@ -12,4 +12,6 @@ export interface CheckResult {
 export interface ScanJobData {
   scanId: string;
   siteUrl: string;
+  siteId?: string;
+  scheduled?: boolean;
 }
