@@ -31,6 +31,7 @@ interface DashboardStats {
 export default function DashboardPage() {
   const { user } = useAuth();
   const [sites, setSites] = useState<Site[]>([]);
+  const [allScans, setAllScans] = useState<(Scan & { siteName: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,7 +39,25 @@ export default function DashboardPage() {
       try {
         const { data } = await api.get('/api/sites');
         const sitesData = data.data?.sites || data.data || data;
-        setSites(Array.isArray(sitesData) ? sitesData : []);
+        const sitesList: Site[] = Array.isArray(sitesData) ? sitesData : [];
+        setSites(sitesList);
+
+        // Fetch scans for each site in parallel
+        if (sitesList.length > 0) {
+          const scansResults = await Promise.allSettled(
+            sitesList.map((site) =>
+              api.get(`/api/scans/site/${site.id}`).then((res) => {
+                const scansData = res.data.data?.scans || res.data.data || res.data;
+                const scans: Scan[] = Array.isArray(scansData) ? scansData : [];
+                return scans.map((scan) => ({ ...scan, siteName: site.name }));
+              })
+            )
+          );
+          const merged = scansResults
+            .filter((r): r is PromiseFulfilledResult<(Scan & { siteName: string })[]> => r.status === 'fulfilled')
+            .flatMap((r) => r.value);
+          setAllScans(merged);
+        }
       } catch {
         // Silently handle fetch error
       } finally {
@@ -50,29 +69,27 @@ export default function DashboardPage() {
   }, []);
 
   const stats: DashboardStats = React.useMemo(() => {
-    const scoresWithValues = sites
-      .filter((s) => s.latestScan?.overallScore != null)
-      .map((s) => s.latestScan!.overallScore!);
+    const completedScans = allScans.filter((s) => s.status === 'COMPLETED' && s.overallScore != null);
 
+    // Latest completed scan per site for average score
+    const latestPerSite = new Map<string, number>();
+    for (const scan of completedScans) {
+      if (!latestPerSite.has(scan.siteId)) {
+        latestPerSite.set(scan.siteId, scan.overallScore!);
+      }
+    }
+    const scores = Array.from(latestPerSite.values());
     const averageScore =
-      scoresWithValues.length > 0
-        ? Math.round(
-            scoresWithValues.reduce((a, b) => a + b, 0) /
-              scoresWithValues.length
-          )
+      scores.length > 0
+        ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
         : 0;
 
     const today = new Date().toDateString();
-    const scansToday = sites.filter(
-      (s) =>
-        s.latestScan?.createdAt &&
-        new Date(s.latestScan.createdAt).toDateString() === today
+    const scansToday = allScans.filter(
+      (s) => new Date(s.createdAt).toDateString() === today
     ).length;
 
-    const activeAlerts = sites.filter(
-      (s) =>
-        s.latestScan?.overallScore != null && s.latestScan.overallScore < 50
-    ).length;
+    const activeAlerts = scores.filter((s) => s < 50).length;
 
     return {
       totalSites: sites.length,
@@ -80,21 +97,16 @@ export default function DashboardPage() {
       scansToday,
       activeAlerts,
     };
-  }, [sites]);
+  }, [sites, allScans]);
 
-  const recentScans: (Scan & { siteName: string })[] = React.useMemo(() => {
-    return sites
-      .filter((s) => s.latestScan)
-      .map((s) => ({
-        ...s.latestScan!,
-        siteName: s.name,
-      }))
+  const recentScans = React.useMemo(() => {
+    return [...allScans]
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )
       .slice(0, 5);
-  }, [sites]);
+  }, [allScans]);
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
@@ -191,9 +203,21 @@ export default function DashboardPage() {
                 <p className="text-gray-500 text-sm">
                   Aucun scan effectue pour le moment.
                 </p>
-                <Link href="/dashboard/sites/new" className="mt-3 inline-block">
-                  <Button size="sm">Ajouter un site</Button>
-                </Link>
+                {sites.length > 0 ? (
+                  <Link href={`/dashboard/sites/${sites[0].id}`} className="mt-3 inline-block">
+                    <Button size="sm" className="gap-2">
+                      <Play className="h-4 w-4" />
+                      Lancer un scan
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/dashboard/sites/new" className="mt-3 inline-block">
+                    <Button size="sm" className="gap-2">
+                      <Plus className="h-4 w-4" />
+                      Ajouter un site
+                    </Button>
+                  </Link>
+                )}
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
