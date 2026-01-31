@@ -36,9 +36,9 @@ const features = [
   },
   {
     icon: Lock,
-    title: 'Conformite OWASP',
+    title: 'Bonnes pratiques OWASP',
     description:
-      'Verifiez la conformite de vos sites web avec le Top 10 OWASP, le standard de reference en securite web.',
+      'Verifiez les bonnes pratiques de securite inspirees du referentiel OWASP : cookies securises, divulgation d\'informations et methodes HTTP.',
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
   },
