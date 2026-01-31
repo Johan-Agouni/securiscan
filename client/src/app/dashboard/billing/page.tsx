@@ -89,8 +89,8 @@ export default function BillingPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Facturation</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Facturation</h1>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           Gerez votre abonnement et consultez votre historique de paiement.
         </p>
       </div>
@@ -100,12 +100,12 @@ export default function BillingPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Plan actuel
               </h2>
               <Badge variant="info">{currentPlanInfo.name}</Badge>
             </div>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {currentPlan === 'FREE'
                 ? 'Profitez des fonctionnalites de base gratuitement.'
                 : `Votre abonnement ${currentPlanInfo.name} est actif.`}
@@ -114,7 +114,7 @@ export default function BillingPage() {
               {currentPlanInfo.features.map((feature) => (
                 <li
                   key={feature}
-                  className="flex items-center gap-2 text-sm text-gray-600"
+                  className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
                 >
                   <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                   {feature}
@@ -138,7 +138,7 @@ export default function BillingPage() {
 
       {/* Plan Comparison */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Comparer les plans
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -152,10 +152,10 @@ export default function BillingPage() {
               <div
                 key={planKey}
                 className={cn(
-                  'relative bg-white rounded-xl border-2 p-6 transition-shadow',
+                  'relative bg-white dark:bg-gray-800 rounded-xl border-2 p-6 transition-shadow',
                   isCurrent
-                    ? 'border-brand-500 shadow-md shadow-brand-100'
-                    : 'border-gray-200 hover:shadow-md'
+                    ? 'border-brand-500 shadow-md shadow-brand-100 dark:shadow-brand-900/30'
+                    : 'border-gray-200 dark:border-gray-700 hover:shadow-md'
                 )}
               >
                 {isCurrent && (
@@ -167,20 +167,20 @@ export default function BillingPage() {
                 )}
 
                 <div className="text-center mb-6">
-                  <h3 className="text-lg font-bold text-gray-900">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                     {plan.name}
                   </h3>
                   <div className="mt-2">
                     {plan.price === 0 ? (
-                      <span className="text-3xl font-bold text-gray-900">
+                      <span className="text-3xl font-bold text-gray-900 dark:text-white">
                         Gratuit
                       </span>
                     ) : (
                       <div>
-                        <span className="text-3xl font-bold text-gray-900">
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">
                           {plan.price.toFixed(2)} EUR
                         </span>
-                        <span className="text-sm text-gray-500"> / mois</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400"> / mois</span>
                       </div>
                     )}
                   </div>
@@ -190,7 +190,7 @@ export default function BillingPage() {
                   {plan.features.map((feature) => (
                     <li
                       key={feature}
-                      className="flex items-center gap-2 text-sm text-gray-600"
+                      className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
                     >
                       <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
                       {feature}
@@ -239,34 +239,34 @@ export default function BillingPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <tr className="border-b border-gray-200 dark:border-gray-700">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Date
                   </th>
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Description
                   </th>
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Montant
                   </th>
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Statut
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {payments.map((payment) => (
                   <tr
                     key={payment.id}
-                    className="hover:bg-gray-50 transition-colors"
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                   >
-                    <td className="py-3 px-4 text-sm text-gray-900">
+                    <td className="py-3 px-4 text-sm text-gray-900 dark:text-gray-200">
                       {formatDate(payment.createdAt)}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600">
+                    <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
                       {payment.description}
                     </td>
-                    <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                    <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">
                       {(payment.amount / 100).toFixed(2)}{' '}
                       {payment.currency.toUpperCase()}
                     </td>
