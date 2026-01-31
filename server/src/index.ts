@@ -4,6 +4,7 @@ import { logger } from './utils/logger';
 import { prisma } from './config/database';
 import { redis } from './config/redis';
 import { startScanWorker } from './modules/scanner/scanner.worker';
+import { restoreAllSchedules } from './modules/scanner/scheduler.service';
 
 async function bootstrap() {
   const app = createApp();
@@ -15,6 +16,9 @@ async function bootstrap() {
   // Start BullMQ scan worker
   startScanWorker();
   logger.info('Scan worker started');
+
+  // Restore scheduled scans from database
+  await restoreAllSchedules();
 
   const server = app.listen(config.PORT, () => {
     logger.info(`Server running on port ${config.PORT} [${config.NODE_ENV}]`);

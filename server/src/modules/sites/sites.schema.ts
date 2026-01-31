@@ -27,6 +27,15 @@ export const updateSiteSchema = {
   }),
 };
 
+export const updateScheduleSchema = {
+  params: z.object({
+    siteId: z.string().uuid('Invalid site ID'),
+  }),
+  body: z.object({
+    scanSchedule: z.enum(['NONE', 'DAILY', 'WEEKLY', 'MONTHLY']),
+  }),
+};
+
 export const siteIdParamSchema = {
   params: z.object({
     siteId: z.string().uuid('Invalid site ID'),

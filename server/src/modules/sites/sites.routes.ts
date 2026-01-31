@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
-import { createSiteSchema, updateSiteSchema, siteIdParamSchema } from './sites.schema';
+import { createSiteSchema, updateSiteSchema, updateScheduleSchema, siteIdParamSchema } from './sites.schema';
 import { sitesController } from './sites.controller';
 
 const router = Router();
@@ -31,6 +31,13 @@ router.put(
   authenticate,
   validate(updateSiteSchema),
   sitesController.update
+);
+
+router.put(
+  '/:siteId/schedule',
+  authenticate,
+  validate(updateScheduleSchema),
+  sitesController.updateSchedule
 );
 
 router.delete(
