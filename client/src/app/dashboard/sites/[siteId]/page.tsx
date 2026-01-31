@@ -50,17 +50,11 @@ const SCAN_STEPS = [
 function ScanProgressCard({ scan }: { scan: Scan }) {
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
   const startTime = scan.startedAt ? new Date(scan.startedAt).getTime() : Date.now();
 
   useEffect(() => {
-    // Animate progress smoothly: ramp up quickly then slow down near the end
     const timer = setInterval(() => {
       const elapsedMs = Date.now() - startTime;
-      const elapsedSec = Math.floor(elapsedMs / 1000);
-      setElapsed(elapsedSec);
-
-      // Fast logarithmic curve: reaches ~80% in 3s, then slows to 95% max
       const t = elapsedMs / 1000;
       const pct = Math.min(95, 100 * (1 - Math.exp(-t / 1.2)));
       setProgress(pct);
@@ -87,7 +81,7 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
             <div>
               <h3 className="font-semibold text-gray-900">Scan en cours...</h3>
               <p className="text-sm text-gray-500">
-                Analyse de securite en cours depuis {elapsed}s
+                Analyse de securite en cours...
               </p>
             </div>
           </div>
@@ -484,7 +478,7 @@ export default function SiteDetailPage() {
                     Statut
                   </th>
                   <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Duree
+                    Checks
                   </th>
                   <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Actions
@@ -493,14 +487,8 @@ export default function SiteDetailPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {scans.map((scan) => {
-                  const duration =
-                    scan.startedAt && scan.completedAt
-                      ? Math.round(
-                          (new Date(scan.completedAt).getTime() -
-                            new Date(scan.startedAt).getTime()) /
-                            1000
-                        )
-                      : null;
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const checksCount = (scan as any)._count?.scanResults ?? null;
 
                   return (
                     <tr
@@ -533,7 +521,7 @@ export default function SiteDetailPage() {
                         </Badge>
                       </td>
                       <td className="py-3 px-4 text-sm text-gray-600">
-                        {duration != null ? `${duration}s` : '--'}
+                        {checksCount != null ? checksCount : '--'}
                       </td>
                       <td className="py-3 px-4 text-right">
                         {scan.status === 'COMPLETED' && (
