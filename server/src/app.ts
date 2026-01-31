@@ -26,6 +26,14 @@ export function createApp() {
     app.set('trust proxy', 1);
   }
 
+  // CORS (must be before helmet for preflight requests)
+  app.use(
+    cors({
+      origin: config.FRONTEND_URL,
+      credentials: true,
+    })
+  );
+
   // Security
   app.use(
     helmet({
@@ -53,12 +61,6 @@ export function createApp() {
     })
   );
   app.use(hpp());
-  app.use(
-    cors({
-      origin: config.FRONTEND_URL,
-      credentials: true,
-    })
-  );
 
   // Rate limiting
   app.use(globalLimiter);
