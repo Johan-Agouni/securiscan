@@ -48,30 +48,33 @@ const SCAN_STEPS = [
 ];
 
 function ScanProgressCard({ scan }: { scan: Scan }) {
+  const [progress, setProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const startTime = scan.startedAt ? new Date(scan.startedAt).getTime() : Date.now();
 
   useEffect(() => {
+    // Animate progress smoothly: ramp up quickly then slow down near the end
     const timer = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - startTime) / 1000));
-    }, 1000);
+      const elapsedMs = Date.now() - startTime;
+      const elapsedSec = Math.floor(elapsedMs / 1000);
+      setElapsed(elapsedSec);
+
+      // Fast logarithmic curve: reaches ~80% in 3s, then slows to 95% max
+      const t = elapsedMs / 1000;
+      const pct = Math.min(95, 100 * (1 - Math.exp(-t / 1.2)));
+      setProgress(pct);
+
+      // Steps advance proportionally to progress
+      const stepIdx = Math.min(
+        Math.floor((pct / 100) * SCAN_STEPS.length),
+        SCAN_STEPS.length - 1
+      );
+      setCurrentStep(stepIdx);
+    }, 100);
+
     return () => clearInterval(timer);
   }, [startTime]);
-
-  // Simulate progress based on elapsed time (each step ~10-15s)
-  const estimatedStepDuration = 12;
-  const currentStepIndex = Math.min(
-    Math.floor(elapsed / estimatedStepDuration),
-    SCAN_STEPS.length - 1
-  );
-  const stepProgress = Math.min(
-    ((elapsed % estimatedStepDuration) / estimatedStepDuration) * 100,
-    100
-  );
-  const overallProgress = Math.min(
-    ((currentStepIndex * 100 + stepProgress) / SCAN_STEPS.length),
-    95
-  );
 
   return (
     <Card className="border-brand-200 bg-gradient-to-r from-brand-50 to-white">
@@ -95,12 +98,12 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
         <div className="space-y-1">
           <div className="flex justify-between text-xs text-gray-500">
             <span>Progression</span>
-            <span>{Math.round(overallProgress)}%</span>
+            <span>{Math.round(progress)}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
             <div
-              className="bg-brand-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
-              style={{ width: `${overallProgress}%` }}
+              className="bg-brand-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
             />
           </div>
         </div>
@@ -109,13 +112,13 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {SCAN_STEPS.map((step, index) => {
             const Icon = step.icon;
-            const isComplete = index < currentStepIndex;
-            const isActive = index === currentStepIndex;
+            const isComplete = index < currentStep;
+            const isActive = index === currentStep;
 
             return (
               <div
                 key={step.key}
-                className={`flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all ${
+                className={`flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all duration-300 ${
                   isComplete
                     ? 'bg-green-50 text-green-700'
                     : isActive
