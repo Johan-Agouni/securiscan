@@ -13,9 +13,9 @@ const iconMap = {
 } as const;
 
 const styleMap = {
-  success: 'border-green-500 bg-green-50 text-green-800',
-  error: 'border-red-500 bg-red-50 text-red-800',
-  info: 'border-blue-500 bg-blue-50 text-blue-800',
+  success: 'border-green-500 bg-green-50 text-green-800 dark:bg-green-950 dark:text-green-300',
+  error: 'border-red-500 bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-300',
+  info: 'border-blue-500 bg-blue-50 text-blue-800 dark:bg-blue-950 dark:text-blue-300',
 } as const;
 
 const iconColorMap = {

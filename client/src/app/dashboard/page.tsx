@@ -164,10 +164,10 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Bonjour{user?.firstName ? `, ${user.firstName}` : ''} !
         </h1>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-gray-600 dark:text-gray-400">
           Voici un apercu de la securite de vos sites web.
         </p>
       </div>
@@ -184,8 +184,8 @@ export default function DashboardPage() {
                 <Icon className={`h-6 w-6 ${stat.color}`} />
               </div>
               <div>
-                <p className="text-sm text-gray-500">{stat.label}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
               </div>
             </Card>
           );
@@ -208,7 +208,7 @@ export default function DashboardPage() {
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {recentScans.map((scan) => (
                   <div
                     key={scan.id}
@@ -216,7 +216,7 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {scan.siteName}
                         </p>
                         <p className="text-xs text-gray-500">
@@ -283,14 +283,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Plan Info */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
+          <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Plan actuel</span>
               <Badge variant="info">{user?.plan || 'FREE'}</Badge>
             </div>
             <div className="flex items-center justify-between text-sm mt-2">
               <span className="text-gray-500">Sites utilises</span>
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-gray-900 dark:text-white">
                 {stats.totalSites}
               </span>
             </div>

@@ -54,17 +54,17 @@ const features = [
 
 export function Features() {
   return (
-    <section className="py-20 sm:py-28 bg-white" id="features">
+    <section className="py-20 sm:py-28 bg-white dark:bg-gray-900" id="features">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <p className="text-sm font-semibold text-brand-600 uppercase tracking-wide mb-3">
             Fonctionnalites
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
             Tout ce dont vous avez besoin pour securiser vos sites
           </h2>
-          <p className="mt-4 text-lg text-gray-600 leading-relaxed">
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
             SecuriScan analyse en profondeur la securite de vos sites web et
             vous fournit des recommandations claires pour corriger les
             vulnerabilites detectees.
@@ -78,17 +78,17 @@ export function Features() {
             return (
               <div
                 key={feature.title}
-                className="group relative p-6 rounded-2xl border border-gray-200 hover:border-brand-200 hover:shadow-lg transition-all duration-300"
+                className="group relative p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-brand-200 dark:hover:border-brand-800 hover:shadow-lg transition-all duration-300"
               >
                 <div
                   className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${feature.bgColor} ${feature.color} mb-4`}
                 >
                   <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   {feature.description}
                 </p>
               </div>

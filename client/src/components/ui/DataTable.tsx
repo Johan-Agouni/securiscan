@@ -19,27 +19,27 @@ export function DataTable<T extends Record<string, unknown>>({
   emptyMessage = 'Aucune donnee disponible.',
 }: DataTableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead className="bg-gray-50 dark:bg-gray-800">
           <tr>
             {columns.map((col) => (
               <th
                 key={col.key}
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
               >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
           {data.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-6 py-12 text-center text-sm text-gray-500"
+                className="px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400"
               >
                 {emptyMessage}
               </td>
@@ -49,14 +49,14 @@ export function DataTable<T extends Record<string, unknown>>({
               <tr
                 key={rowIndex}
                 className={cn(
-                  'transition-colors hover:bg-gray-50',
-                  rowIndex % 2 === 1 && 'bg-gray-50/50'
+                  'transition-colors hover:bg-gray-50 dark:hover:bg-gray-800',
+                  rowIndex % 2 === 1 && 'bg-gray-50/50 dark:bg-gray-800/50'
                 )}
               >
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300"
                   >
                     {col.render
                       ? col.render(item, rowIndex)

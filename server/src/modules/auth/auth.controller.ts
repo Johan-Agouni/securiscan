@@ -48,6 +48,19 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   apiResponse({ res, message: 'Email verified successfully' });
 });
 
+export const updateProfile = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user!.userId;
+  const user = await authService.updateProfile(userId, req.body);
+  apiResponse({ res, data: user, message: 'Profile updated' });
+});
+
+export const changePassword = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user!.userId;
+  const { currentPassword, newPassword } = req.body;
+  await authService.changePassword(userId, currentPassword, newPassword);
+  apiResponse({ res, message: 'Password changed successfully' });
+});
+
 export const getProfile = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.userId;
   const user = await authService.getProfile(userId);

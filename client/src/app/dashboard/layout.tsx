@@ -23,10 +23,10 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="text-center">
           <Spinner size="lg" className="mx-auto mb-4" />
-          <p className="text-sm text-gray-500">Chargement...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Chargement...</p>
         </div>
       </div>
     );
@@ -37,7 +37,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar />

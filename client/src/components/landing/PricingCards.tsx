@@ -25,17 +25,17 @@ const planConfig = [
 
 export function PricingCards() {
   return (
-    <section className="py-20 sm:py-28 bg-gray-50" id="pricing">
+    <section className="py-20 sm:py-28 bg-gray-50 dark:bg-gray-950" id="pricing">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <p className="text-sm font-semibold text-brand-600 uppercase tracking-wide mb-3">
             Tarifs
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
             Un plan adapte a chaque besoin
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
             Commencez gratuitement et evoluez selon vos besoins. Aucun
             engagement, annulez a tout moment.
           </p>
@@ -50,10 +50,10 @@ export function PricingCards() {
               <div
                 key={config.key}
                 className={cn(
-                  'relative flex flex-col rounded-2xl border bg-white p-8 shadow-sm transition-shadow hover:shadow-md',
+                  'relative flex flex-col rounded-2xl border bg-white dark:bg-gray-800 p-8 shadow-sm transition-shadow hover:shadow-md',
                   config.highlighted
                     ? 'border-brand-600 ring-2 ring-brand-600'
-                    : 'border-gray-200'
+                    : 'border-gray-200 dark:border-gray-700'
                 )}
               >
                 {/* Popular badge */}
@@ -66,13 +66,13 @@ export function PricingCards() {
                 )}
 
                 {/* Plan name */}
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {plan.name}
                 </h3>
 
                 {/* Price */}
                 <div className="mt-4 flex items-baseline gap-1">
-                  <span className="text-4xl font-extrabold text-gray-900">
+                  <span className="text-4xl font-extrabold text-gray-900 dark:text-white">
                     {plan.price === 0 ? 'Gratuit' : `${plan.price}\u00A0\u20AC`}
                   </span>
                   {plan.price > 0 && (
@@ -85,7 +85,7 @@ export function PricingCards() {
                   {plan.features.map((feature) => (
                     <li
                       key={feature}
-                      className="flex items-start gap-3 text-sm text-gray-700"
+                      className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300"
                     >
                       <Check
                         className={cn(

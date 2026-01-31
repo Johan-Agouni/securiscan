@@ -58,8 +58,8 @@ function NavLink({
       className={cn(
         'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
         isActive
-          ? 'bg-brand-50 text-brand-700'
-          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          ? 'bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-400'
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200'
       )}
       title={collapsed ? item.label : undefined}
     >
@@ -80,7 +80,7 @@ export function Sidebar() {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="flex items-center justify-between px-4 py-5 border-b border-gray-200">
+      <div className="flex items-center justify-between px-4 py-5 border-b border-gray-200 dark:border-gray-700">
         <Link
           href="/dashboard"
           className={cn(
@@ -93,7 +93,7 @@ export function Sidebar() {
         </Link>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden lg:flex p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          className="hidden lg:flex p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors"
           aria-label={collapsed ? 'Etendre le menu' : 'Reduire le menu'}
         >
           <ChevronLeft
@@ -125,7 +125,7 @@ export function Sidebar() {
                 </p>
               )}
               {collapsed && (
-                <hr className="border-gray-200" />
+                <hr className="border-gray-200 dark:border-gray-700" />
               )}
             </div>
             {adminNav.map((item) => (
@@ -147,7 +147,7 @@ export function Sidebar() {
       {/* Mobile overlay trigger */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-gray-200 text-gray-600 hover:text-gray-900 transition-colors"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
         aria-label="Ouvrir le menu"
       >
         <Menu className="h-5 w-5" />
@@ -160,11 +160,11 @@ export function Sidebar() {
             className="fixed inset-0 bg-black/50"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl">
+          <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 shadow-xl">
             <div className="absolute top-4 right-4">
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                 aria-label="Fermer le menu"
               >
                 <X className="h-5 w-5" />
@@ -178,7 +178,7 @@ export function Sidebar() {
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          'hidden lg:flex flex-col bg-white border-r border-gray-200 transition-all duration-200',
+          'hidden lg:flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-200',
           collapsed ? 'w-[72px]' : 'w-64'
         )}
       >
