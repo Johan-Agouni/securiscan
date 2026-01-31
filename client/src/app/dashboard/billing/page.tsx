@@ -159,7 +159,7 @@ export default function BillingPage() {
                 )}
               >
                 {isCurrent && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <div className="text-center mb-2">
                     <Badge variant="info" className="shadow-sm">
                       Plan actuel
                     </Badge>
