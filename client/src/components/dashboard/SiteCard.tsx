@@ -26,15 +26,15 @@ export function SiteCard({ site }: SiteCardProps) {
   return (
     <Link
       href={`/dashboard/sites/${site.id}`}
-      className="group block bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md hover:border-gray-300 transition-all duration-200"
+      className="group block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200"
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="p-2 bg-gray-50 rounded-lg group-hover:bg-brand-50 transition-colors">
+          <div className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg group-hover:bg-brand-50 dark:group-hover:bg-brand-900/30 transition-colors">
             <Globe className="h-5 w-5 text-gray-400 group-hover:text-brand-600 transition-colors" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-sm font-semibold text-gray-900 truncate group-hover:text-brand-600 transition-colors">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate group-hover:text-brand-600 transition-colors">
               {site.name}
             </h3>
             <p className="text-xs text-gray-500 truncate">
@@ -45,7 +45,7 @@ export function SiteCard({ site }: SiteCardProps) {
         <ArrowRight className="h-4 w-4 text-gray-300 group-hover:text-brand-500 transition-colors flex-shrink-0 mt-1" />
       </div>
 
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
         <div className="flex items-center gap-2">
           {/* Score */}
           {latestScore != null ? (

@@ -66,7 +66,7 @@ function ResultItem({ result }: { result: ScanResult }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="border border-gray-100 rounded-lg hover:border-gray-200 transition-colors">
+    <div className="border border-gray-100 dark:border-gray-700 rounded-lg hover:border-gray-200 dark:hover:border-gray-600 transition-colors">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between p-4 text-left"
@@ -74,10 +74,10 @@ function ResultItem({ result }: { result: ScanResult }) {
         <div className="flex items-center gap-3 min-w-0">
           <SeverityIcon severity={result.severity} />
           <div className="min-w-0">
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
               {result.checkName}
             </p>
-            <p className="text-xs text-gray-500 mt-0.5 truncate">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
               {result.message}
             </p>
           </div>
@@ -97,29 +97,29 @@ function ResultItem({ result }: { result: ScanResult }) {
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 pt-0 border-t border-gray-50 space-y-3">
+        <div className="px-4 pb-4 pt-0 border-t border-gray-50 dark:border-gray-700 space-y-3">
           <div className="mt-3">
-            <p className="text-sm text-gray-700">{result.message}</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">{result.message}</p>
           </div>
 
           {(result.value || result.expected) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {result.value && (
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-xs font-medium text-gray-500 uppercase mb-1">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-1">
                     Valeur actuelle
                   </p>
-                  <p className="text-sm text-gray-900 font-mono break-all">
+                  <p className="text-sm text-gray-900 dark:text-gray-100 font-mono break-all">
                     {result.value}
                   </p>
                 </div>
               )}
               {result.expected && (
-                <div className="bg-green-50 rounded-lg p-3">
-                  <p className="text-xs font-medium text-green-700 uppercase mb-1">
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                  <p className="text-xs font-medium text-green-700 dark:text-green-400 uppercase mb-1">
                     Valeur attendue
                   </p>
-                  <p className="text-sm text-green-900 font-mono break-all">
+                  <p className="text-sm text-green-900 dark:text-green-300 font-mono break-all">
                     {result.expected}
                   </p>
                 </div>
@@ -128,11 +128,11 @@ function ResultItem({ result }: { result: ScanResult }) {
           )}
 
           {result.recommendation && (
-            <div className="bg-brand-50 rounded-lg p-3">
-              <p className="text-xs font-medium text-brand-700 uppercase mb-1">
+            <div className="bg-brand-50 dark:bg-brand-900/20 rounded-lg p-3">
+              <p className="text-xs font-medium text-brand-700 dark:text-brand-400 uppercase mb-1">
                 Recommendation
               </p>
-              <p className="text-sm text-brand-900">{result.recommendation}</p>
+              <p className="text-sm text-brand-900 dark:text-brand-300">{result.recommendation}</p>
             </div>
           )}
         </div>
@@ -227,15 +227,15 @@ export default function ScanDetailPage() {
       <div>
         <Link
           href={`/dashboard/sites/${siteId}`}
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-4"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour au site
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Detail du scan
         </h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           {formatDateTime(scan.createdAt)}
         </p>
       </div>
@@ -254,42 +254,42 @@ export default function ScanDetailPage() {
         {/* Summary Stats */}
         <Card className="lg:col-span-3">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-green-50 rounded-xl">
-              <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-green-700">
+            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
+              <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-green-700 dark:text-green-400">
                 {summaryStats.pass}
               </p>
-              <p className="text-xs text-green-600 font-medium">Reussi</p>
+              <p className="text-xs text-green-600 dark:text-green-500 font-medium">Reussi</p>
             </div>
-            <div className="text-center p-4 bg-blue-50 rounded-xl">
-              <Info className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-blue-700">
+            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+              <Info className="h-6 w-6 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
                 {summaryStats.info}
               </p>
-              <p className="text-xs text-blue-600 font-medium">Info</p>
+              <p className="text-xs text-blue-600 dark:text-blue-500 font-medium">Info</p>
             </div>
-            <div className="text-center p-4 bg-yellow-50 rounded-xl">
-              <AlertTriangle className="h-6 w-6 text-yellow-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-yellow-700">
+            <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl">
+              <AlertTriangle className="h-6 w-6 text-yellow-600 dark:text-yellow-400 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-400">
                 {summaryStats.warning}
               </p>
-              <p className="text-xs text-yellow-600 font-medium">
+              <p className="text-xs text-yellow-600 dark:text-yellow-500 font-medium">
                 Avertissement
               </p>
             </div>
-            <div className="text-center p-4 bg-red-50 rounded-xl">
-              <XCircle className="h-6 w-6 text-red-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-red-700">
+            <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
+              <XCircle className="h-6 w-6 text-red-600 dark:text-red-400 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-red-700 dark:text-red-400">
                 {summaryStats.critical}
               </p>
-              <p className="text-xs text-red-600 font-medium">Critique</p>
+              <p className="text-xs text-red-600 dark:text-red-500 font-medium">Critique</p>
             </div>
           </div>
 
           {/* Meta */}
-          <div className="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-4 text-sm text-gray-600">
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
             <div>
-              <span className="text-gray-400">Statut : </span>
+              <span className="text-gray-400 dark:text-gray-500">Statut : </span>
               <Badge
                 variant={
                   scan.status === 'COMPLETED'
@@ -319,7 +319,7 @@ export default function ScanDetailPage() {
       {/* Tabs + Results */}
       <Card>
         {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-1 mb-6 border-b border-gray-200 -mt-1">
+        <div className="flex flex-wrap gap-1 mb-6 border-b border-gray-200 dark:border-gray-700 -mt-1">
           {TABS.map((tab) => (
             <button
               key={tab.key}
@@ -327,7 +327,7 @@ export default function ScanDetailPage() {
               className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab.key
                   ? 'border-brand-600 text-brand-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
               {tab.label}
@@ -366,7 +366,7 @@ export default function ScanDetailPage() {
                   )
                 ).map(([category, results]) => (
                   <div key={category} className="mb-6 last:mb-0">
-                    <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-3">
                       {CATEGORY_LABELS[category] || category}
                     </h3>
                     <div className="space-y-2">
