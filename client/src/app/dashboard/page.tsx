@@ -203,21 +203,9 @@ export default function DashboardPage() {
                 <p className="text-gray-500 text-sm">
                   Aucun scan effectue pour le moment.
                 </p>
-                {sites.length > 0 ? (
-                  <Link href={`/dashboard/sites/${sites[0].id}`} className="mt-3 inline-block">
-                    <Button size="sm" className="gap-2">
-                      <Play className="h-4 w-4" />
-                      Lancer un scan
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link href="/dashboard/sites/new" className="mt-3 inline-block">
-                    <Button size="sm" className="gap-2">
-                      <Plus className="h-4 w-4" />
-                      Ajouter un site
-                    </Button>
-                  </Link>
-                )}
+                <p className="text-gray-400 text-xs mt-1">
+                  Utilisez les actions rapides pour commencer.
+                </p>
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
