@@ -18,11 +18,8 @@ const envSchema = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
-  SMTP_HOST: z.string().default('smtp.ethereal.email'),
-  SMTP_PORT: z.coerce.number().default(587),
-  SMTP_USER: z.string().optional(),
-  SMTP_PASSWORD: z.string().optional(),
-  FROM_EMAIL: z.string().email().default('noreply@securiscan.dev'),
+  RESEND_API_KEY: z.string().optional(),
+  FROM_EMAIL: z.string().default('SecuriScan <onboarding@resend.dev>'),
 
   FRONTEND_URL: z.string().url().default('http://localhost:3000'),
 });
