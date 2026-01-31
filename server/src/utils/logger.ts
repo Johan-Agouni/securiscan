@@ -21,7 +21,8 @@ export const logger = winston.createLogger({
   defaultMeta: { service: 'securiscan-api' },
 });
 
-if (process.env.NODE_ENV === 'production') {
+// File logs only when LOG_TO_FILE is explicitly enabled (not on Railway/containers)
+if (process.env.LOG_TO_FILE === 'true') {
   logger.add(
     new winston.transports.File({ filename: 'logs/error.log', level: 'error' })
   );
