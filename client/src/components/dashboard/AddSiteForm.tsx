@@ -86,13 +86,13 @@ export function AddSiteForm({ onSuccess }: AddSiteFormProps) {
       />
 
       {/* Plan limit warning */}
-      <div className="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+        <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm font-medium text-yellow-800">
+          <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
             Limite du plan {planInfo.name}
           </p>
-          <p className="text-xs text-yellow-700 mt-0.5">
+          <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-0.5">
             Votre plan vous permet de surveiller jusqu&apos;a{' '}
             {planInfo.maxSites} site{planInfo.maxSites > 1 ? 's' : ''}.
           </p>

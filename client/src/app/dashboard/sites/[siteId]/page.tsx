@@ -71,7 +71,7 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
   }, [startTime]);
 
   return (
-    <Card className="border-brand-200 bg-gradient-to-r from-brand-50 to-white">
+    <Card className="border-brand-200 dark:border-brand-800 bg-gradient-to-r from-brand-50 to-white dark:from-brand-950/50 dark:to-gray-800">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -79,8 +79,8 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
               <Loader2 className="h-6 w-6 text-brand-600 animate-spin" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Scan en cours...</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-semibold text-gray-900 dark:text-white">Scan en cours...</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Analyse de securite en cours...
               </p>
             </div>
@@ -90,11 +90,11 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
 
         {/* Overall progress bar */}
         <div className="space-y-1">
-          <div className="flex justify-between text-xs text-gray-500">
+          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
             <span>Progression</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
             <div
               className="bg-brand-600 h-2.5 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
@@ -114,10 +114,10 @@ function ScanProgressCard({ scan }: { scan: Scan }) {
                 key={step.key}
                 className={`flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all duration-300 ${
                   isComplete
-                    ? 'bg-green-50 text-green-700'
+                    ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                     : isActive
-                      ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300'
-                      : 'bg-gray-50 text-gray-400'
+                      ? 'bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 ring-1 ring-brand-300 dark:ring-brand-700'
+                      : 'bg-gray-50 dark:bg-gray-700 text-gray-400'
                 }`}
               >
                 {isComplete ? (
@@ -241,7 +241,7 @@ export default function SiteDetailPage() {
   if (!site) {
     return (
       <div className="text-center py-20">
-        <p className="text-gray-500">Site introuvable.</p>
+        <p className="text-gray-500 dark:text-gray-400">Site introuvable.</p>
         <Link href="/dashboard/sites" className="mt-4 inline-block">
           <Button variant="secondary">Retour aux sites</Button>
         </Link>
@@ -272,7 +272,7 @@ export default function SiteDetailPage() {
       <div>
         <Link
           href="/dashboard/sites"
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-4"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour aux sites
@@ -280,7 +280,7 @@ export default function SiteDetailPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">{site.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{site.name}</h1>
               <Badge variant={site.isActive ? 'success' : 'default'}>
                 {site.isActive ? 'Actif' : 'Inactif'}
               </Badge>
@@ -326,13 +326,13 @@ export default function SiteDetailPage() {
 
       {/* Delete Confirmation */}
       {showDeleteConfirm && (
-        <Card className="border-red-200 bg-red-50">
+        <Card className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-red-900">
+              <p className="font-medium text-red-900 dark:text-red-300">
                 Confirmer la suppression
               </p>
-              <p className="text-sm text-red-700 mt-1">
+              <p className="text-sm text-red-700 dark:text-red-400 mt-1">
                 Cette action est irreversible. Toutes les donnees et l&apos;historique
                 des scans seront supprimes.
               </p>
@@ -366,8 +366,8 @@ export default function SiteDetailPage() {
             <ScoreGauge score={latestScore} size="lg" />
           ) : (
             <div className="text-center">
-              <div className="w-32 h-32 rounded-full border-4 border-dashed border-gray-200 flex items-center justify-center mx-auto mb-3">
-                <span className="text-2xl text-gray-300">--</span>
+              <div className="w-32 h-32 rounded-full border-4 border-dashed border-gray-200 dark:border-gray-600 flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl text-gray-300 dark:text-gray-500">--</span>
               </div>
               <p className="text-sm text-gray-500">Aucun scan effectue</p>
             </div>
@@ -378,13 +378,13 @@ export default function SiteDetailPage() {
         <Card title="Informations" className="lg:col-span-2">
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <dt className="text-sm text-gray-500">URL</dt>
-              <dd className="mt-1 text-sm font-medium text-gray-900 break-all">
+              <dt className="text-sm text-gray-500 dark:text-gray-400">URL</dt>
+              <dd className="mt-1 text-sm font-medium text-gray-900 dark:text-white break-all">
                 {site.url}
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-gray-500">Statut</dt>
+              <dt className="text-sm text-gray-500 dark:text-gray-400">Statut</dt>
               <dd className="mt-1">
                 <Badge variant={site.isActive ? 'success' : 'default'}>
                   {site.isActive ? 'Actif' : 'Inactif'}
@@ -392,14 +392,14 @@ export default function SiteDetailPage() {
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-gray-500">Date de creation</dt>
-              <dd className="mt-1 text-sm font-medium text-gray-900">
+              <dt className="text-sm text-gray-500 dark:text-gray-400">Date de creation</dt>
+              <dd className="mt-1 text-sm font-medium text-gray-900 dark:text-white">
                 {formatDate(site.createdAt)}
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-gray-500">Nombre de scans</dt>
-              <dd className="mt-1 text-sm font-medium text-gray-900">
+              <dt className="text-sm text-gray-500 dark:text-gray-400">Nombre de scans</dt>
+              <dd className="mt-1 text-sm font-medium text-gray-900 dark:text-white">
                 {scans.length}
               </dd>
             </div>
@@ -420,7 +420,7 @@ export default function SiteDetailPage() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <CartesianGrid strokeDasharray="3 3" className="[&>line]:stroke-gray-200 dark:[&>line]:stroke-gray-700" stroke="#f0f0f0" />
                 <XAxis
                   dataKey="date"
                   tick={{ fontSize: 12 }}
@@ -467,25 +467,25 @@ export default function SiteDetailPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <tr className="border-b border-gray-200 dark:border-gray-700">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Date
                   </th>
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Score
                   </th>
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Statut
                   </th>
-                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Checks
                   </th>
-                  <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {scans.map((scan) => {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const checksCount = (scan as any)._count?.scanResults ?? null;
@@ -493,9 +493,9 @@ export default function SiteDetailPage() {
                   return (
                     <tr
                       key={scan.id}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <td className="py-3 px-4 text-sm text-gray-900">
+                      <td className="py-3 px-4 text-sm text-gray-900 dark:text-gray-200">
                         {formatDateTime(scan.createdAt)}
                       </td>
                       <td className="py-3 px-4">
@@ -520,7 +520,7 @@ export default function SiteDetailPage() {
                           {SCAN_STATUS_LABELS[scan.status] || scan.status}
                         </Badge>
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-600">
+                      <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
                         {checksCount != null ? checksCount : '--'}
                       </td>
                       <td className="py-3 px-4 text-right">

@@ -23,13 +23,13 @@ export default function NewSitePage() {
       <div>
         <Link
           href="/dashboard/sites"
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-4"
+          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4"
         >
           <ArrowLeft className="h-4 w-4" />
           Retour aux sites
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Ajouter un site</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Ajouter un site</h1>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           Ajoutez un nouveau site web a surveiller. Nous analyserons sa securite
           automatiquement.
         </p>
