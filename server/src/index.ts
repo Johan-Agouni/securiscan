@@ -17,8 +17,10 @@ async function bootstrap() {
   startScanWorker();
   logger.info('Scan worker started');
 
-  // Restore scheduled scans from database
-  await restoreAllSchedules();
+  // Restore scheduled scans in background (non-blocking)
+  restoreAllSchedules().catch((err) =>
+    logger.error('Failed to restore schedules:', err),
+  );
 
   const server = app.listen(config.PORT, () => {
     logger.info(`Server running on port ${config.PORT} [${config.NODE_ENV}]`);

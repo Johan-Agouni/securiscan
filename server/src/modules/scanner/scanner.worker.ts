@@ -108,15 +108,16 @@ async function processScanJob(job: Job<ScanJobData>): Promise<void> {
     (r) => r.severity === 'CRITICAL',
   ).length;
 
-  const previousScan = await prisma.scan.findFirst({
+  const currentScan = await prisma.scan.findUnique({ where: { id: scanId }, select: { siteId: true } });
+  const previousScan = currentScan ? await prisma.scan.findFirst({
     where: {
-      siteId: (await prisma.scan.findUnique({ where: { id: scanId }, select: { siteId: true } }))!.siteId,
+      siteId: currentScan.siteId,
       status: 'COMPLETED',
       id: { not: scanId },
     },
     orderBy: { completedAt: 'desc' },
     select: { overallScore: true },
-  });
+  }) : null;
 
   const scoreDrop = previousScan?.overallScore != null
     ? previousScan.overallScore - overallScore

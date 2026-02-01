@@ -73,9 +73,9 @@ export async function restoreAllSchedules(): Promise<void> {
       select: { id: true, scanSchedule: true },
     });
 
-    for (const site of sites) {
-      await scheduleRecurringScan(site.id, site.scanSchedule);
-    }
+    await Promise.all(
+      sites.map((site) => scheduleRecurringScan(site.id, site.scanSchedule)),
+    );
 
     logger.info(`Restored ${sites.length} scheduled scan(s)`);
   } catch (error) {
