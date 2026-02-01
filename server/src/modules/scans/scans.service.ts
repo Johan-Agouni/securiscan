@@ -83,7 +83,7 @@ export const scansService = {
         skip,
         take: limit,
         include: {
-          _count: { select: { scanResults: true } },
+          _count: { select: { results: true } },
         },
       }),
       prisma.scan.count({

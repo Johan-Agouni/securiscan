@@ -172,7 +172,7 @@ export function generateScanReportPDF(scan: PdfScanData): Promise<Buffer> {
           // Message
           doc.font('Helvetica').fontSize(9).fillColor('#64748b');
           doc.text(result.message, 75, y, { width: 420 });
-          const msgHeight = doc.heightOfString(result.message, { width: 420, font: 'Helvetica', fontSize: 9 });
+          const msgHeight = doc.heightOfString(result.message, { width: 420 });
           y += msgHeight + 4;
 
           // Value / Expected
@@ -191,7 +191,7 @@ export function generateScanReportPDF(scan: PdfScanData): Promise<Buffer> {
           if (result.recommendation) {
             doc.font('Helvetica').fontSize(8).fillColor('#059669');
             doc.text(`Recommandation: ${result.recommendation}`, 75, y, { width: 420 });
-            const recHeight = doc.heightOfString(`Recommandation: ${result.recommendation}`, { width: 420, font: 'Helvetica', fontSize: 8 });
+            const recHeight = doc.heightOfString(`Recommandation: ${result.recommendation}`, { width: 420 });
             y += recHeight + 4;
           }
 
