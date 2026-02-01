@@ -10,6 +10,23 @@ Full-stack security monitoring SaaS platform built with Next.js, Express, Postgr
 
 > Utilisez les comptes de demonstration (voir section [Comptes de demonstration](#comptes-de-demonstration)) pour explorer toutes les fonctionnalites.
 
+## Apercu
+
+### Landing Page
+![Landing Page](docs/screenshots/landing.png)
+
+### Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Detail d'un scan
+![Scan Detail](docs/screenshots/scan-detail.png)
+
+### Page Tarifs
+![Pricing](docs/screenshots/pricing.png)
+
+### Mode Clair
+![Light Mode](docs/screenshots/light-mode.png)
+
 ## Fonctionnalites
 
 ### Scanner de Securite
