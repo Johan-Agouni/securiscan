@@ -39,20 +39,23 @@ export default function SitesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Mes sites</h1>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Gerez et surveillez la securite de vos sites web.
-          </p>
+      {/* Header Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-600 to-brand-800 dark:from-brand-700 dark:to-brand-950 p-8 text-white shadow-lg">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+        <div className="relative flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Mes sites</h1>
+            <p className="mt-1 text-brand-100 text-sm">
+              {sites.length} site{sites.length !== 1 ? 's' : ''} surveille{sites.length !== 1 ? 's' : ''} &middot; Gerez et surveillez la securite de vos sites web
+            </p>
+          </div>
+          <Link href="/dashboard/sites/new">
+            <Button className="bg-white/90 text-brand-700 hover:bg-white gap-2 shadow-md border-0">
+              <Plus className="h-4 w-4" />
+              Ajouter un site
+            </Button>
+          </Link>
         </div>
-        <Link href="/dashboard/sites/new">
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
-            Ajouter un site
-          </Button>
-        </Link>
       </div>
 
       {/* Sites Grid */}
@@ -74,10 +77,17 @@ export default function SitesPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className={`grid gap-5 ${sites.length <= 2 ? 'grid-cols-1 md:grid-cols-2 max-w-3xl' : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3'}`}>
           {sites.map((site) => (
             <SiteCard key={site.id} site={site} />
           ))}
+          <Link
+            href="/dashboard/sites/new"
+            className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 p-8 text-gray-400 hover:border-brand-400 hover:text-brand-500 dark:hover:border-brand-500 dark:hover:text-brand-400 transition-all duration-200 min-h-[160px] hover:bg-brand-50/50 dark:hover:bg-brand-950/30"
+          >
+            <Plus className="h-8 w-8 mb-2" />
+            <span className="text-sm font-medium">Ajouter un site</span>
+          </Link>
         </div>
       )}
     </div>
