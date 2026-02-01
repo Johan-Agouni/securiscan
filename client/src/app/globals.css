@@ -51,6 +51,14 @@
   }
 }
 
+/* Disable all transitions during theme switch so everything changes at once */
+html.disable-transitions,
+html.disable-transitions *,
+html.disable-transitions *::before,
+html.disable-transitions *::after {
+  transition-duration: 0s !important;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
