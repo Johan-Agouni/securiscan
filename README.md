@@ -16,9 +16,30 @@ Full-stack security monitoring SaaS platform built with Next.js, Express, Postgr
 - **Authentification JWT** - Access + refresh tokens avec rotation
 - **Multi-sites** - Surveillez plusieurs sites depuis un dashboard unique
 - **Score de securite** - Note de 0 a 100 avec grade A-F
-- **Alertes email** - Notifications automatiques si score critique
+- **Alertes email** - Notifications automatiques si score critique ou chute de score
 - **Plans tarifaires** - Free / Pro / Business avec Stripe
 - **Dashboard admin** - Gestion des utilisateurs et statistiques
+- **Mode sombre** - Basculement instantane jour/nuit
+
+### Rapport PDF exportable
+- Export PDF complet des resultats de scan avec score, grade et recommandations
+- Generation serveur via PDFKit avec graphiques et mise en page professionnelle
+- Telechargement direct depuis la page de detail d'un scan
+
+### Scans programmes
+- Planification automatique : quotidien, hebdomadaire ou mensuel
+- Jobs BullMQ avec cron patterns (execution a 2h du matin)
+- Restauration automatique des schedules au redemarrage du serveur
+- Configuration par site depuis le dashboard
+
+### Notifications email avancees
+- Notification de fin de scan avec resume des resultats
+- Alerte automatique si score < 50, resultats critiques, ou chute de score >= 10 points
+- Templates HTML responsives
+
+### Edition de site
+- Modal d'edition pour modifier le nom et le statut actif/inactif d'un site
+- Mise a jour en temps reel depuis la page de detail du site
 
 ## Stack Technique
 
@@ -31,8 +52,10 @@ Full-stack security monitoring SaaS platform built with Next.js, Express, Postgr
 | Auth | JWT (access + refresh), bcrypt |
 | Paiement | Stripe (checkout, webhooks, portal) |
 | Email | Nodemailer |
+| PDF | PDFKit |
 | Tests | Jest, Supertest, Vitest, React Testing Library |
 | DevOps | Docker, Docker Compose, GitHub Actions |
+| Deploiement | Vercel (client) + Railway (serveur) |
 
 ## Architecture
 
@@ -56,9 +79,10 @@ securiscan/
 │   │   ├── modules/        # Feature modules
 │   │   │   ├── auth/       # Authentification JWT
 │   │   │   ├── sites/      # CRUD sites monitores
-│   │   │   ├── scans/      # Declenchement + historique scans
+│   │   │   ├── scans/      # Declenchement + historique + PDF
 │   │   │   ├── scanner/    # Engine de scan (BullMQ worker)
-│   │   │   │   └── checks/ # Headers, SSL, OWASP, Performance
+│   │   │   │   ├── checks/ # Headers, SSL, OWASP, Performance
+│   │   │   │   └── scheduler.service.ts # Scans programmes
 │   │   │   ├── payments/   # Stripe integration
 │   │   │   ├── admin/      # Administration
 │   │   │   └── notifications/ # Emails transactionnels
@@ -151,6 +175,7 @@ npm run dev
 | GET | /api/sites/:siteId | Detail d'un site |
 | PUT | /api/sites/:siteId | Modifier un site |
 | DELETE | /api/sites/:siteId | Supprimer un site |
+| PUT | /api/sites/:siteId/schedule | Configurer le scan programme |
 
 ### Scans
 | Methode | Endpoint | Description |
@@ -159,6 +184,7 @@ npm run dev
 | GET | /api/scans/site/:siteId | Historique des scans |
 | GET | /api/scans/:scanId | Detail d'un scan |
 | GET | /api/scans/:scanId/results | Resultats du scan |
+| GET | /api/scans/:scanId/report/pdf | Telecharger le rapport PDF |
 
 ### Paiements
 | Methode | Endpoint | Description |
@@ -198,6 +224,8 @@ Le scanner analyse 4 categories avec un score pondere :
 | Scans par jour | 5 | 50 | Illimite |
 | Historique | 7 jours | 90 jours | 1 an |
 | Alertes email | Non | Oui | Oui |
+| Scans programmes | Non | Oui | Oui |
+| Rapport PDF | Non | Oui | Oui |
 | Support | - | Standard | Prioritaire |
 
 ## Tests
@@ -224,6 +252,15 @@ npm test --workspace=client
 - Sanitization des entrees
 - CORS configure
 - Limitation taille des requetes (10 Ko)
+
+## Deploiement
+
+| Service | Plateforme |
+|---------|-----------|
+| Client (Next.js) | Vercel - auto-deploy depuis `main` |
+| Serveur (Express) | Railway - auto-deploy depuis `main` |
+| Base de donnees | PostgreSQL sur Railway |
+| Redis | Redis sur Railway |
 
 ## Licence
 
