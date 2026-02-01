@@ -4,6 +4,12 @@ Plateforme SaaS de monitoring de securite web. Scannez vos sites, detectez les v
 
 Full-stack security monitoring SaaS platform built with Next.js, Express, PostgreSQL, Redis, and Stripe.
 
+## Demo live
+
+**[Acceder a la demo](https://securiscan-client.vercel.app/)**
+
+> Utilisez les comptes de demonstration (voir section [Comptes de demonstration](#comptes-de-demonstration)) pour explorer toutes les fonctionnalites.
+
 ## Fonctionnalites
 
 ### Scanner de Securite
@@ -257,10 +263,23 @@ npm test --workspace=client
 
 | Service | Plateforme |
 |---------|-----------|
-| Client (Next.js) | Vercel - auto-deploy depuis `main` |
-| Serveur (Express) | Railway - auto-deploy depuis `main` |
+| Client (Next.js) | [Vercel](https://securiscan-client.vercel.app/) - auto-deploy depuis `main` |
+| Serveur (Express) | [Railway](https://securiscan-server-production.up.railway.app/) - auto-deploy depuis `main` |
 | Base de donnees | PostgreSQL sur Railway |
 | Redis | Redis sur Railway |
+
+## Modifications recentes
+
+- **Mode sombre instantane** - Basculement jour/nuit sans flash ni double-clic
+- **Performance serveur** - Correction du demarrage bloquant et des requetes N+1
+- **Rapport PDF** - Correction de la generation (graphiques, polices standard)
+- **Scans programmes** - Planification automatique avec BullMQ (quotidien, hebdomadaire, mensuel)
+- **Notifications email** - Alertes automatiques sur score critique ou chute de score
+- **Edition de site** - Modal d'edition (nom + statut actif/inactif)
+- **Dashboard ameliore** - Scans recents contextuels, stats basees sur les vrais scans, sidebar active
+- **Dark mode complet** - Support sur toutes les pages (sites, scans, facturation, dashboard)
+- **Changement de mot de passe** - Nouvelle section dans les parametres du compte
+- **Correction des grades** - Alignement frontend/backend du calcul de score
 
 ## Licence
 
