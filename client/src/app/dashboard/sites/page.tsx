@@ -50,7 +50,7 @@ export default function SitesPage() {
             </p>
           </div>
           <Link href="/dashboard/sites/new">
-            <Button className="bg-white/90 text-brand-700 hover:bg-white gap-2 shadow-md border-0">
+            <Button variant="secondary" className="!bg-white !text-brand-700 hover:!bg-brand-50 gap-2 shadow-md !border-0">
               <Plus className="h-4 w-4" />
               Ajouter un site
             </Button>
