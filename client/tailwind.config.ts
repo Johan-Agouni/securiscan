@@ -31,6 +31,14 @@ const config: Config = {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
+      animation: {
+        'score-fill': 'score-fill 1s ease-out forwards',
+      },
+      keyframes: {
+        'score-fill': {
+          '0%': { strokeDasharray: '0 94' },
+        },
+      },
     },
   },
   plugins: [],

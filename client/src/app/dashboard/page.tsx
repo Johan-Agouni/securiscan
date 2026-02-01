@@ -135,28 +135,28 @@ export default function DashboardPage() {
       value: stats.totalSites,
       icon: Globe,
       color: 'text-brand-600',
-      bg: 'bg-brand-50',
+      bg: 'bg-gradient-to-br from-brand-50 to-brand-100 dark:from-brand-900/40 dark:to-brand-800/20',
     },
     {
       label: 'Score moyen',
       value: stats.averageScore > 0 ? `${stats.averageScore}/100` : '--',
       icon: TrendingUp,
       color: 'text-green-600',
-      bg: 'bg-green-50',
+      bg: 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/40 dark:to-green-800/20',
     },
     {
       label: "Scans aujourd'hui",
       value: stats.scansToday,
       icon: ScanLine,
       color: 'text-blue-600',
-      bg: 'bg-blue-50',
+      bg: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/20',
     },
     {
       label: 'Alertes actives',
       value: stats.activeAlerts,
       icon: AlertTriangle,
       color: stats.activeAlerts > 0 ? 'text-red-600' : 'text-gray-400',
-      bg: stats.activeAlerts > 0 ? 'bg-red-50' : 'bg-gray-50',
+      bg: stats.activeAlerts > 0 ? 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/40 dark:to-red-800/20' : 'bg-gray-50 dark:bg-gray-800',
     },
   ];
 
@@ -164,8 +164,10 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Bonjour{user?.firstName ? `, ${user.firstName}` : ''} !
+        <h1 className="text-3xl font-bold">
+          <span className="bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent">
+            {new Date().getHours() < 18 ? 'Bonjour' : 'Bonsoir'}{user?.firstName ? `, ${user.firstName}` : ''} !
+          </span>
         </h1>
         <p className="mt-1 text-gray-600 dark:text-gray-400">
           Voici un apercu de la securite de vos sites web.
@@ -177,7 +179,7 @@ export default function DashboardPage() {
         {statCards.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} className="flex items-center gap-4">
+            <Card key={stat.label} className="flex items-center gap-4 hover:ring-2 hover:ring-brand-100 dark:hover:ring-brand-900/50 hover:shadow-md transition-all duration-200">
               <div
                 className={`p-3 rounded-xl ${stat.bg}`}
               >
@@ -212,9 +214,14 @@ export default function DashboardPage() {
                 {recentScans.map((scan) => (
                   <div
                     key={scan.id}
-                    className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
+                    className="flex items-center justify-between py-3 first:pt-0 last:pb-0 rounded-lg px-3 -mx-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
+                      <span className={`inline-block h-2.5 w-2.5 rounded-full flex-shrink-0 ${
+                        scan.overallScore != null
+                          ? scan.overallScore >= 80 ? 'bg-green-500' : scan.overallScore >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                          : 'bg-gray-300'
+                      }`} />
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                           {scan.siteName}
@@ -250,35 +257,26 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <Card title="Actions rapides">
-          <div className="space-y-3">
-            <Link href="/dashboard/sites/new" className="block">
-              <Button variant="primary" className="w-full justify-start gap-3">
-                <Plus className="h-4 w-4" />
-                Ajouter un site
-              </Button>
+          <div className="space-y-2">
+            <Link href="/dashboard/sites/new" className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors group">
+              <div className="p-2 rounded-lg bg-brand-50 dark:bg-brand-900/30 group-hover:bg-brand-100 dark:group-hover:bg-brand-900/50 transition-colors">
+                <Plus className="h-4 w-4 text-brand-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Ajouter un site</span>
             </Link>
             {sites.length > 0 && (
-              <Link
-                href={`/dashboard/sites/${sites[0].id}`}
-                className="block"
-              >
-                <Button
-                  variant="secondary"
-                  className="w-full justify-start gap-3"
-                >
-                  <Play className="h-4 w-4" />
-                  Lancer un scan
-                </Button>
+              <Link href={`/dashboard/sites/${sites[0].id}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors group">
+                <div className="p-2 rounded-lg bg-green-50 dark:bg-green-900/30 group-hover:bg-green-100 dark:group-hover:bg-green-900/50 transition-colors">
+                  <Play className="h-4 w-4 text-green-600" />
+                </div>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Lancer un scan</span>
               </Link>
             )}
-            <Link href="/dashboard/sites" className="block">
-              <Button
-                variant="ghost"
-                className="w-full justify-start gap-3"
-              >
-                <Globe className="h-4 w-4" />
-                Voir tous les sites
-              </Button>
+            <Link href="/dashboard/sites" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors group">
+              <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors">
+                <Globe className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+              </div>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Voir tous les sites</span>
             </Link>
           </div>
 
