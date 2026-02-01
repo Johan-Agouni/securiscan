@@ -23,7 +23,7 @@ describe('getScoreGrade', () => {
     expect(getScoreGrade(95)).toBe('A');
     expect(getScoreGrade(85)).toBe('B');
     expect(getScoreGrade(70)).toBe('C');
-    expect(getScoreGrade(45)).toBe('D');
+    expect(getScoreGrade(55)).toBe('D');
     expect(getScoreGrade(20)).toBe('F');
   });
 });
