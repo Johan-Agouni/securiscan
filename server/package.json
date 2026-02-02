@@ -20,6 +20,7 @@
     "@types/pdfkit": "^0.17.4",
     "bcryptjs": "^2.4.3",
     "bullmq": "^5.30.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/hpp": "^0.2.6",

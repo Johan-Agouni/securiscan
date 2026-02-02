@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { api, setTokens, clearTokens, getAccessToken } from '@/lib/api';
+import { api, setTokens, clearTokens, getAccessToken, getRefreshToken } from '@/lib/api';
 import type { User } from '@/types';
 
 interface AuthContextType {
@@ -94,7 +94,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async (): Promise<void> => {
     try {
-      await api.post('/api/auth/logout');
+      const refreshToken = getRefreshToken();
+      await api.post('/api/auth/logout', { refreshToken });
     } catch {
       // Proceed with local logout even if server call fails
     } finally {

@@ -37,9 +37,12 @@ export const adminController = {
     apiResponse({ res, data: user, message: 'User updated' });
   }),
 
-  getRecentScans: asyncHandler(async (_req: Request, res: Response) => {
-    const scans = await adminService.getRecentScans();
+  getRecentScans: asyncHandler(async (req: Request, res: Response) => {
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 20;
 
-    apiResponse({ res, data: scans, message: 'Recent scans retrieved' });
+    const data = await adminService.getRecentScans(page, limit);
+
+    apiResponse({ res, data, message: 'Recent scans retrieved' });
   }),
 };

@@ -10,13 +10,13 @@ export async function sendEmail(
   to: string,
   subject: string,
   html: string
-): Promise<void> {
+): Promise<boolean> {
   if (!resend) {
     logger.warn('RESEND_API_KEY not configured, skipping email', {
       to,
       subject,
     });
-    return;
+    return false;
   }
 
   try {
@@ -26,11 +26,13 @@ export async function sendEmail(
       subject,
       html,
     });
+    return true;
   } catch (error) {
     logger.error('Failed to send email', {
       to,
       subject,
       error: error instanceof Error ? error.message : error,
     });
+    return false;
   }
 }

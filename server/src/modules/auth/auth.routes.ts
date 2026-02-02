@@ -6,6 +6,7 @@ import {
   registerSchema,
   loginSchema,
   refreshSchema,
+  logoutSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
   updateProfileSchema,
@@ -29,7 +30,7 @@ const router = Router();
 router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
 router.post('/refresh', validate(refreshSchema), refresh);
-router.post('/logout', authenticate, logout);
+router.post('/logout', authenticate, validate(logoutSchema), logout);
 router.post(
   '/forgot-password',
   authLimiter,

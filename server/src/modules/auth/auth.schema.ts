@@ -25,7 +25,7 @@ export const loginSchema = {
 
 export const refreshSchema = {
   body: z.object({
-    refreshToken: z.string(),
+    refreshToken: z.string().optional(),
   }),
 };
 
@@ -47,6 +47,12 @@ export const updateProfileSchema = {
     firstName: z.string().min(2).optional(),
     lastName: z.string().min(2).optional(),
     notificationsEnabled: z.boolean().optional(),
+  }),
+};
+
+export const logoutSchema = {
+  body: z.object({
+    refreshToken: z.string().optional(),
   }),
 };
 

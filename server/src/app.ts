@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import { config } from './config';
@@ -68,6 +69,9 @@ export function createApp() {
 
   // Rate limiting
   app.use(globalLimiter);
+
+  // Cookie parsing
+  app.use(cookieParser());
 
   // Body parsing
   app.use(express.json({ limit: '10kb' }));

@@ -7,6 +7,7 @@ import {
   userListSchema,
   userIdParamSchema,
   updateUserSchema,
+  scanListSchema,
 } from './admin.schema';
 
 const router = Router();
@@ -29,6 +30,6 @@ router.patch(
   adminController.updateUser
 );
 
-router.get('/scans', adminController.getRecentScans);
+router.get('/scans', validate(scanListSchema), adminController.getRecentScans);
 
 export const adminRoutes = router;

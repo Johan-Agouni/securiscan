@@ -115,26 +115,37 @@ export const adminService = {
     return result;
   },
 
-  async getRecentScans() {
-    const scans = await prisma.scan.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-      include: {
-        site: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                email: true,
-                firstName: true,
-                lastName: true,
+  async getRecentScans(page: number = 1, limit: number = 20) {
+    const skip = (page - 1) * limit;
+
+    const [scans, total] = await Promise.all([
+      prisma.scan.findMany({
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+        include: {
+          site: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  email: true,
+                  firstName: true,
+                  lastName: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      }),
+      prisma.scan.count(),
+    ]);
 
-    return scans;
+    return {
+      scans,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   },
 };

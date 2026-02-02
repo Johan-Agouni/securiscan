@@ -12,6 +12,7 @@ import { config } from '../../config';
 
 const REFRESH_TOKEN_EXPIRY_DAYS = 7;
 const RESET_TOKEN_EXPIRY_HOURS = 1;
+const EMAIL_VERIFY_EXPIRY_HOURS = 24;
 
 function excludePassword<T extends { passwordHash?: unknown }>(
   user: T
@@ -35,6 +36,8 @@ export class AuthService {
 
     const hashed = await hashPassword(password);
     const emailVerifyToken = crypto.randomBytes(32).toString('hex');
+    const emailVerifyExpiry = new Date();
+    emailVerifyExpiry.setHours(emailVerifyExpiry.getHours() + EMAIL_VERIFY_EXPIRY_HOURS);
 
     const user = await prisma.user.create({
       data: {
@@ -43,6 +46,7 @@ export class AuthService {
         firstName,
         lastName,
         emailVerifyToken,
+        emailVerifyExpiry,
       },
     });
 
@@ -198,11 +202,14 @@ export class AuthService {
 
   async verifyEmail(token: string) {
     const user = await prisma.user.findFirst({
-      where: { emailVerifyToken: token },
+      where: {
+        emailVerifyToken: token,
+        emailVerifyExpiry: { gt: new Date() },
+      },
     });
 
     if (!user) {
-      throw ApiError.badRequest('Invalid verification token');
+      throw ApiError.badRequest('Invalid or expired verification token');
     }
 
     await prisma.user.update({
@@ -210,6 +217,7 @@ export class AuthService {
       data: {
         emailVerified: true,
         emailVerifyToken: null,
+        emailVerifyExpiry: null,
       },
     });
   }
