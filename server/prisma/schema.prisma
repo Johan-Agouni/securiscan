@@ -57,7 +57,6 @@ model User {
   plan                PlanType  @default(FREE)
   emailVerified       Boolean   @default(false) @map("email_verified")
   emailVerifyToken    String?   @map("email_verify_token")
-  emailVerifyExpiry   DateTime? @map("email_verify_expiry")
   resetPasswordToken  String?   @map("reset_password_token")
   resetPasswordExpiry DateTime? @map("reset_password_expiry")
   stripeCustomerId    String?   @unique @map("stripe_customer_id")
