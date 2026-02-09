@@ -38,3 +38,6 @@ server/prisma/migrations/**/migration_lock.toml
 
 # Misc
 *.tsbuildinfo
+
+# Claude Code
+.claude
